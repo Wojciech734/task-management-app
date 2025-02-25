@@ -3,10 +3,12 @@ package com.example.taskManagementApp.task;
 import com.example.taskManagementApp.user.User;
 import com.example.taskManagementApp.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class TaskServiceImpl implements TaskService {
 
     @Autowired
@@ -17,12 +19,15 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task createNewTask(Task task, Long userId) throws Exception {
+        Optional<User> userOptional = userService.findUserById(userId);
+        if (userOptional.isEmpty()) {
+            throw new Exception("User with ID: " + userId + " not found.");
+        }
 
-        Optional<User> user = userService.findUserById(userId);
-
+        User user = userOptional.get();
         Task newTask = new Task();
         newTask.setCompleted(false);
-        newTask.setUser(user.get());
+        newTask.setUser(user);
         newTask.setTitle(task.getTitle());
         newTask.setDescription(task.getDescription());
         newTask.setDueDate(task.getDueDate());
@@ -32,14 +37,26 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task editTask(Task newTask, Long taskId) throws Exception {
+        Optional<Task> taskOptional = taskRepository.findById(taskId);
+        if (taskOptional.isEmpty()) {
+            throw new Exception("Task with ID: " + taskId + " not found.");
+        }
 
-        Optional<Task> taskToEdit = taskRepository.findById(taskId);
+        Task taskToEdit = taskOptional.get();
+        taskToEdit.setTitle(newTask.getTitle());
+        taskToEdit.setDescription(newTask.getDescription());
+        taskToEdit.setCompleted(newTask.isCompleted());
+        taskToEdit.setDueDate(newTask.getDueDate());
 
-        return null;
+        return taskRepository.save(taskToEdit);
     }
 
     @Override
-    public String deleteTask(Long id) {
+    public String deleteTask(Long id) throws Exception {
+        Optional<Task> taskById = taskRepository.findById(id);
+        if (taskById.isEmpty()) {
+            throw new Exception("task with ID: " + id + " not found");
+        }
         taskRepository.deleteById(id);
         return "task has been deleted successfully";
     }

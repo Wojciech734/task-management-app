@@ -9,7 +9,7 @@ public interface TaskService {
 
     Task createNewTask(Task task, Long userId) throws Exception;
     Task editTask(Task newTask, Long taskId) throws Exception;
-    String deleteTask(Long id);
+    String deleteTask(Long id) throws Exception;
     List<Task> findAllTasks();
 
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("tasks")
+@RequestMapping("/tasks")
 public class TaskController {
 
     @Autowired
@@ -19,18 +19,26 @@ public class TaskController {
     }
 
     @PostMapping("/{userId}")
-    public Task createTask(@RequestBody() Task task, @PathVariable("userId") Long userId) throws Exception {
+    public Task createTask(
+            @RequestBody() Task task,
+            @PathVariable("userId") Long userId
+    ) throws Exception {
         return taskService.createNewTask(task, userId);
     }
 
     @DeleteMapping("/{taskId}")
-    public String deleteTask(@PathVariable("taskId") Long taskId) {
-        return null;
+    public String deleteTask(
+            @PathVariable("taskId") Long taskId
+    ) throws Exception {
+        return taskService.deleteTask(taskId);
     }
 
     @PutMapping("/{taskId}")
-    public Task updateTask(@PathVariable("taskId") Long taskId) {
-        return null;
+    public Task updateTask(
+            @RequestBody() Task newTask,
+            @PathVariable("taskId") Long taskId
+    ) throws Exception {
+        return taskService.editTask(newTask, taskId);
     }
 
 }
