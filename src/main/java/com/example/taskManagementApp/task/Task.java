@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tasks")
@@ -28,5 +28,4 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
 }
