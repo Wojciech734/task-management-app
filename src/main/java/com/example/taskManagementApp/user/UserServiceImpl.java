@@ -1,5 +1,6 @@
 package com.example.taskManagementApp.user;
 
+import com.example.taskManagementApp.security.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,5 +51,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+    @Override
+    public User findUserByJwt(String token) {
+        String emailFromJwtToken = JwtProvider.getEmailFromJwtToken(token);
+        return userRepository.findByEmail(emailFromJwtToken);
+    }
 
 }

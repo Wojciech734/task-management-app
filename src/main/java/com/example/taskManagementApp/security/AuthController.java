@@ -36,12 +36,13 @@ public class AuthController {
         User byEmail = userRepository.findByEmail(user.getEmail());
 
         if (byEmail != null) {
-            throw new Exception("user with email: " + user.getEmail() + "already exists");
+            throw new Exception("user with email: " + user.getEmail() + " already exists");
         }
 
         User newUser = new User();
         newUser.setEmail(user.getEmail());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setUsername(user.getUsername());
 
         User savedUser = userRepository.save(newUser);
         Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -53,7 +54,7 @@ public class AuthController {
         return new AuthResponse(token, " registered successfully");
     }
 
-    @GetMapping("/sign-in")
+    @PostMapping("/sign-in")
     public AuthResponse signIn(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticate(loginRequest.getEmail(), loginRequest.getPassword());
 

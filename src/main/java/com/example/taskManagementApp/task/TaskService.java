@@ -11,5 +11,4 @@ public interface TaskService {
     Task editTask(Task newTask, Long taskId) throws Exception;
     String deleteTask(Long id) throws Exception;
     List<Task> findAllTasks();
-
 }

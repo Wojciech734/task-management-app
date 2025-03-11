@@ -10,4 +10,5 @@ public interface UserService {
     User createNewAccount(User user) throws Exception;
     String deleteAccount(Long id) throws Exception;
     List<User> findAllUsers();
+    User findUserByJwt(String token);
 }
